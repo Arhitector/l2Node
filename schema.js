@@ -1,66 +1,28 @@
-const commonTypes = `
-type Stats {
-  str: Int
-  dex: Int
-  con: Int
-  int: Int
-  wit: Int
-  men: Int
+import {
+  makeExecutableSchema,
+  addMockFunctionsToSchema,
+  mergeSchemas,
+} from 'graphql-tools';
+import resolvers from './resolvers';
 
-  cp: Int
-  hp: Int
-  mp: Int
-  
-  accuracy: Int
-  attackSpeed: Int
-  critical: Int
-  evasion: Int
-  speed: Int
-  load: Int
-  castingSpeed: Int
-  physicalAttack: Int
-  magicalAttack: Int
-}
-`;
-export default `
-  type RaidBosses {
-    _id: String!
-    gameId: Int
-    name: String!
-    description: String!
-    guards: String
-    drop: String
-    spoil: String
+import RaidBossesSchema from './models/RaidBosses/schema';
+import UsersSchema from './models/Users/schema';
 
-    respawnTime: String
-    killed: String
-    race: String
-  }
+const RaidBossesSchemaMock = makeExecutableSchema({
+  typeDefs: RaidBossesSchema
+});
 
-  type Query {
-    allBosses: [RaidBosses]!
-    getBossById(id: String!): RaidBosses!
-  }
+const UsersSchemaMock = makeExecutableSchema({
+  typeDefs: UsersSchema
+});
 
-  type Mutation {
-    addBoss(name: String!): RaidBosses!
-    killBoss(
-      id: String!
-      date: String!
-    ): RaidBosses!
-    updateBoss(
-      id: String
-      gameId: Int
-      name: String
-      description: String
-      guards: String
-      drop: String
-      spoil: String
+addMockFunctionsToSchema({ schema: RaidBossesSchemaMock });
+addMockFunctionsToSchema({ schema: UsersSchemaMock });
 
-      respawnTime: String
-      killed: String
-      race: String
-    ): RaidBosses!
-  }
-
-`;
+export default mergeSchemas({
+  schemas: [
+    RaidBossesSchemaMock,
+    UsersSchemaMock,
+  ],
+  resolvers: { ...resolvers }
+});
