@@ -42,30 +42,30 @@ export default `
     killBoss: RaidBosses!
   }
 
+  input RaidBossInput {
+    _id: String!
+    gameId: Int
+    name: String!
+    description: String
+    guards: String
+    drop: String
+    spoil: String
+    respawnTime: String
+    race: String
+  }
+
   type Query {
     allBosses: [RaidBosses]!
     getBossById(id: String!): RaidBosses!
   }
 
   type Mutation {
-    addBoss(name: String!): RaidBosses!
+    addBoss(raidBoss: RaidBossInput): RaidBosses!
     killBoss(
       id: String!
       date: String!
     ): RaidBosses!
-    updateBoss(
-      id: String
-      gameId: Int
-      name: String
-      description: String
-      guards: String
-      drop: String
-      spoil: String
-
-      respawnTime: String
-      killed: String
-      race: String
-    ): RaidBosses!
+    updateBoss(raidBoss: RaidBossInput): RaidBosses!
   }
 
   schema {

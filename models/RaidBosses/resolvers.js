@@ -29,8 +29,8 @@ export default {
       return newBoss;
     },
     updateBoss: async (parent, args, { RaidBosses }) => {
-      let boss = await RaidBosses.findById(args.id);
-      boss = merge(boss, args);
+      let boss = await RaidBosses.findById(args.raidBoss._id);
+      boss = merge(boss, args.raidBoss);
       await boss.save();
       return boss;
     },
