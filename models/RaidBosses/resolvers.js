@@ -4,6 +4,7 @@ import { PubSub } from 'graphql-subscriptions';
 export const pubsub = new PubSub();
 
 const ADD_BOSS = "ADD_BOSS";
+const UPDATE_BOSS = "UPDATE_BOSS";
 const KILL_BOSS = "KILL_BOSS";
 
 export default {
@@ -17,7 +18,7 @@ export default {
       return returnData;
     },
     getBossById: async (parent, args, { RaidBosses }) => {
-      const boss = await RaidBosses.findById(args.id); 
+      const boss = await RaidBosses.findById(args.id);
       return boss;
     }
   },
@@ -25,13 +26,16 @@ export default {
     addBoss: async (parent, args, { RaidBosses }) => {
       const newBoss = await new RaidBosses(args).save();
       newBoss._id = newBoss._id.toString();
-      pubsub.publish(ADD_BOSS, { newBoss });
+      pubsub.publish(ADD_BOSS, { updatedBoss: newBoss });
       return newBoss;
     },
     updateBoss: async (parent, args, { RaidBosses }) => {
       let boss = await RaidBosses.findById(args.raidBoss._id);
+      
       boss = merge(boss, args.raidBoss);
-      await boss.save();
+
+      const updatedBoss = await boss.save();
+      pubsub.publish(UPDATE_BOSS, { updatedBoss });
       return boss;
     },
     killBoss: async (parent, { id, date }, { RaidBosses }) => {
@@ -43,7 +47,8 @@ export default {
     }
   },
   Subscription: {
-    addBoss: async () => pubsub.asyncIterator(ADD_BOSS),
-    killBoss: async () => pubsub.asyncIterator(KILL_BOSS),
+    updatedBoss: {
+      subscribe: () => pubsub.asyncIterator(UPDATE_BOSS)
+    },
   }
 }
