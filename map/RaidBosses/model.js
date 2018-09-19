@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-export default mongoose.model('RaidBosses', {
+
+const RaidBossesSchema = new mongoose.Schema({
   name: String,
   gameId: Number,
   name: String,
@@ -11,3 +12,6 @@ export default mongoose.model('RaidBosses', {
   killed: String,
   race: String,
 });
+const RaidBosses = mongoose.model('RaidBoss', RaidBossesSchema);
+
+export default RaidBosses;
