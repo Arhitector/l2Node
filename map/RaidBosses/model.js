@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const RaidBossesSchema = new mongoose.Schema({
   name: String,
   gameId: Number,
-  name: String,
   description: String,
   guards: String,
   drop: String,
