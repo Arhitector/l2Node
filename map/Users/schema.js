@@ -1,8 +1,8 @@
-import UserTC from './grpah';
+import UserTC from './typeComposer';
 import { schemaComposer } from 'graphql-compose';
 
 schemaComposer.Query.addFields({
-  findUserById: UserTC.getResolver('findById'),
+  userById: UserTC.getResolver('findById'),
 });
 
 schemaComposer.Mutation.addFields({

@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
+import cors from 'cors';
 import mongoose from 'mongoose';
 import Context from './context';
 import Schema from './schemas';
@@ -13,7 +14,7 @@ const PORT = 8000;
 
 const app = express();
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: Schema, context: Context }));
+app.use('/graphql', cors(), bodyParser.json(), graphqlExpress({ schema: Schema, context: Context }));
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 
 app.listen(PORT)
